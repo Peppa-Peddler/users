@@ -1,0 +1,25 @@
+{
+  "name": "users",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Peppa-Peddler/users.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Peppa-Peddler/users/issues"
+  },
+  "homepage": "https://github.com/Peppa-Peddler/users#readme",
+  "dependencies": {
+    "express-generator": "^4.15.0",
+    "knex": "^0.12.9",
+    "passport": "^0.3.2"
+  }
+}
