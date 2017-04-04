@@ -1,11 +1,11 @@
 var LocalStrategy   = require('passport-local').Strategy;
 var bcrypt = require('bcryptjs');
-var user = require('../models/user');
+var User = require('../models/user');
 
 module.exports = function (passport) {
 	passport.serializeUser(function(user, done) {
-		console.log(user.u_id +" was seralized");
-		done(null, user.u_id);
+		console.log(user.id_u +" was seralized");
+		done(null, user.id_u);
 	});
 
 	passport.deserializeUser(function(id, done) {
@@ -20,19 +20,19 @@ module.exports = function (passport) {
 			passReqToCallback : true
 		},
 		function ( req, username, password, done ) {
-			process.nextTick (function () {
+			process.nextTick (function (callback) {
 				User.findOne( username, function (err, isNotAvailable, user) {
 					if (err)
 						return done(err);
-					if (user) {
+					if (isNotAvailable == true) {
 						return done(err, false, req.flash('signupMessage', 'Username already taken D:'));
 					}	else {
 						console.log('New local user!');
 						var user = new User();
-						user.local.username = username;
+						user.username = req.body.username;
 							var salt = bcrypt.genSaltSync();
 							var hash = bcrypt.hashSync(req.body.password,salt);
-						user.local.password = hash;
+						user.password = hash;
 						user.save(function (newUser) {
 							console.log("new user: " +  newUser);
 							return done(null);
@@ -46,12 +46,13 @@ module.exports = function (passport) {
 			passwordField : 'password',
 			passReqToCallback : true
 		},
-		function ( req,username, password, done) {
-			User.validPass(username, password, function(err, passMatch, user) {
+		function ( req, name, pass, done) {
+			User.validPass( name, pass, function(err, passMatch, user) {
 				if (!passMatch){
 					return done(null, false, req.flash('loginMessage','Wrong credentials.'));
 				}
 				passport.authenticate();
+				console.log('authenticated!');
 				return done(null,user);
 			});
 	}));

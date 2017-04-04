@@ -6,11 +6,15 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var flash = require('connect-flash');
+var session = require('express-session');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var login = require('./routes/login');
 var signup = require('./routes/signup');
+var show = require('./routes/show');
+var profile = require('./routes/profile');
+var logout = require('./routes/logout');
 
 var app = express();
 
@@ -18,6 +22,9 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(session({secret:'bGliZWx1bGEyMDE3bGliZWx1bGEyMDE3'}));
+app.use(passport.initialize());
+app.use(passport.session());
 require('./config/passport')(passport);
 
 app.use(favicon());
@@ -31,6 +38,9 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/login', login);
 app.use('/signup', signup);
+app.use('/show', show);
+app.use('/profile', profile);
+app.use('/logout', logout);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

@@ -13,7 +13,6 @@
 
     <div class="page-header text-center">
         <h1><span class="fa fa-anchor"></span> Profile Page</h1>
-        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
     </div>
 
     <div class="row">
@@ -24,15 +23,20 @@
                 <h3><span class="fa fa-user"></span> Local</h3>
 
                     <p>
-                        <strong>id</strong>: <%= user._id %><br>
-                        <strong>email</strong>: <%= user.local.email %><br>
-                        <strong>password</strong>: <%= user.local.password %>
+												<strong>Privilages</strong>: <%= user.tipo%><br>
+                        <strong>id</strong>: <%= user.id_u %><br>
+                        <strong>Name</strong>: <%= user.username %><br>
+                        <strong>Pass</strong>: <%= user.password %>
                     </p>
 
             </div>
         </div>
+				<form action="/logout" method="get">
+					<input type="submit" value="LogOut?" />
+				</form>
 
     </div>
+		
 
 </div>
 </body>
