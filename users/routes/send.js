@@ -5,14 +5,13 @@ var User = require('../models/user');
 var passport = require('passport');
 
 /* POST login credentials. */
-router.get('/', isLoggedIn, function(req, res) {
-	var sub = knex('usuarios').where( {})
-	knex('usuarios').join('buzon', 'usuarios.id_u', '=', 'buzon.rem_id').select('username','mensaje').orderBy('id_m','asc').then( function(result) {
-		res.render('profile', {
-			user: req.user,
-			mensajes: result
-		});
+router.post('/', isLoggedIn, function(req, res) {
+	knex('buzon').insert([ {'rem_id': req.user.id_u, 'mensaje': req.param('mensaje')} ]).then(function(result){
+		console.log(result);
+		console.log(req.date);
+		console.log(req.param('mensaje'));
 	});
+	res.redirect('/profile');
 });
 
 module.exports = router;

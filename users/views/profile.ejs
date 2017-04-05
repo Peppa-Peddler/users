@@ -1,41 +1,57 @@
 <!doctype html>
 <html>
 <head>
-    <title>Node Authentication</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <style>
-        body        { padding-top:80px; word-wrap:break-word; }
-    </style>
+	<title>Node Authentication</title>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<style>
+			body        { padding-top:80px; word-wrap:break-word; }
+	</style>
 </head>
 <body>
 <div class="container">
 
-    <div class="page-header text-center">
-        <h1><span class="fa fa-anchor"></span> Profile Page</h1>
-    </div>
+	<div class="page-header text-center">
+		<h1><span class="fa fa-anchor"></span> Profile Page</h1>
+	</div>
 
-    <div class="row">
+		<div class="row">
+			<!-- LOCAL INFORMATION -->
+			<div class="col-sm-6">
+				<div class="well">
+					<h3><span class="fa fa-user"></span> Local</h3>
+							<p>
+									<strong>Privilages</strong>: <%= user.tipo%><br>
+									<strong>id</strong>: <%= user.id_u %><br>
+									<strong>Name</strong>: <%= user.username %><br>
+									<strong>Pass</strong>: <%= user.password %>
+							</p>
+							<a href="/profile">Recargar</a>
+				</div>
+			</div>
 
-        <!-- LOCAL INFORMATION -->
-        <div class="col-sm-6">
-            <div class="well">
-                <h3><span class="fa fa-user"></span> Local</h3>
+			<div class="col-sm-6">
+				<div class="well">
+							<h1>Bandeja</h1>
+								<% for (var i = 0 ; i < mensajes.length ; i ++){ %>
+									<div>
+										<p>
+											De: <%= mensajes[i].username %><br>
+											<%= mensajes[i].mensaje %>
+										<p>
+								</div>
+							<% } %>
+					</div>
+					<form action="/send" method="post">
+							<textarea name="mensaje"></textarea><br>
+							<input type="submit" value="SEND!">
+					</form>
+				</div>
+	</div>
+			<form action="/logout" method="get">
+				<input type="submit" value="LogOut?" />
+			</form>
 
-                    <p>
-												<strong>Privilages</strong>: <%= user.tipo%><br>
-                        <strong>id</strong>: <%= user.id_u %><br>
-                        <strong>Name</strong>: <%= user.username %><br>
-                        <strong>Pass</strong>: <%= user.password %>
-                    </p>
-
-            </div>
-        </div>
-				<form action="/logout" method="get">
-					<input type="submit" value="LogOut?" />
-				</form>
-
-    </div>
 		
 
 </div>
