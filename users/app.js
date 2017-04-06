@@ -16,7 +16,7 @@ var show = require('./routes/show');
 var profile = require('./routes/profile');
 var logout = require('./routes/logout');
 var send = require('./routes/send');
-var send = require('./routes/tsend');
+var tsend = require('./routes/tsend');
 
 var app = express();
 
@@ -45,7 +45,7 @@ app.use('/show', show);
 app.use('/profile', profile);
 app.use('/logout', logout);
 app.use('/send', send);
-app.use('/tsend', send);
+app.use('/tsend', tsend);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

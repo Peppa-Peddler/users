@@ -20,6 +20,7 @@ router.get('/', isLoggedIn, function(req, res) {
 				tareas: result2
 			});
 		});
+		console.log(mensajes);
 	} else {
 		var mensajes;
 		knex('usuarios').join('buzon', 'usuarios.id_u', '=', 'buzon.rem_id')
