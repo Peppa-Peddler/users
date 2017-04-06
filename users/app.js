@@ -16,6 +16,7 @@ var show = require('./routes/show');
 var profile = require('./routes/profile');
 var logout = require('./routes/logout');
 var send = require('./routes/send');
+var send = require('./routes/tsend');
 
 var app = express();
 
@@ -34,6 +35,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(flash());
 
 app.use('/', routes);
 app.use('/users', users);
@@ -43,6 +45,7 @@ app.use('/show', show);
 app.use('/profile', profile);
 app.use('/logout', logout);
 app.use('/send', send);
+app.use('/tsend', send);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

@@ -27,6 +27,12 @@
 									<strong>Pass</strong>: <%= user.password %>
 							</p>
 							<a href="/profile">Recargar</a>
+							
+							<% if(user.tipo==0) { %>
+							<form action="/signup" method="get">
+								<input type="submit" value="Create a new account" />
+ 							</form>
+							<% } %>
 				</div>
 			</div>
 
@@ -43,16 +49,36 @@
 							<% } %>
 					</div>
 					<form action="/send" method="post">
-							<textarea name="mensaje"></textarea><br>
+							<textarea name="mensaje" placeholder="Message"></textarea><br>
 							<input type="submit" value="SEND!">
 					</form>
 				</div>
 	</div>
-			<form action="/logout" method="get">
-				<input type="submit" value="LogOut?" />
-			</form>
-
-		
+		<div class="col-sm-6">
+			<div class="well">
+					<h1>Tasks</h1>
+					<% for (var i = 0 ; i < tareas.length ; i ++){ %>
+						<div>
+								<p>
+									De: <%= tareas[i].username %><br>
+									<%= tareas[i].t_title %>
+									<%= tareas[i].t_content %>
+								<p>
+						</div>	
+					<% } %>
+			</div>
+				<% if(user.tipo == 0) { %>
+				<form action="/tsend" method="post">
+						<input type="text" name="empleado" placeholder="id_empleado"><br>
+						<textarea name="title" placeholder="Titulo"></textarea><br>
+						<textarea name="tarea" placeholder="Descripcion"></textarea><br>
+						<input type="submit" value="T SEND!">
+				</form>
+				<% } %>
+		</div>
+	<form action="/logout" method="get">
+		<input type="submit" value="LogOut?" />
+	</form>
 
 </div>
 </body>

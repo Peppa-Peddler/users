@@ -10,13 +10,22 @@
 	<div class="">
 
 		<h1>Sign Up!</h1>
+		<!-- show any messages that come back with authentication -->
+		<% if (message.length > 0) { %>
+			<div class="alert alert-danger"><%= message %></div>
+		<% } %>
 		<form action="/signup" method="post">
 			user<br><input type="text" name="username" required><br>
 			password<br><input type="password" name="password" id="password" required><br>
 			Repeat password<br><input type="password" name="password2" id="confirm_password" required><br>
+			<select name="tipo">
+				<option value="0">Admin</option>
+				<option value="1">NoAdmin1</option>
+				<option value="2">NoAdmin2</option>
+			</select>
 			<input type="submit" value="Submit">
 		</form> 
-		<p>Already have and account? <a href='/'>Login</a></p>
+		<p>Return? <a href='/profile'>ME</a></p>
 
 	</div>
 		<script src="confirm_password.js">

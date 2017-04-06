@@ -4,16 +4,23 @@ var knex = require('../db/connection');
 var User = require('../models/user');
 var passport = require('passport');
 
-router.get('/', function(req, res) {
-	res.render('signup');
+router.get('/',isLoggedInAdmin, function(req, res) {
+	res.render('signup', {message: req.flash('signupMessage')} );
 	console.log('rendered signup');
 });
 /* POST signup credentials. */
-router.post('/', function(req,res,next) {
-	passport.authenticate('local-signup', function(err,user,info){
-		if(err) return next(err);
-		if(user) console.log('Created succesfully');
-	})(req,res,next);	
-});
+router.post('/', isLoggedInAdmin,	passport.authenticate('local-signup', {
+	succesRedirect : '/signup',
+	failureRedirect : '/signup',
+	failureFlash : true
+}));
 
 module.exports = router;
+
+function isLoggedInAdmin(req,res,next){
+   console.log(req.user.tipo);
+  if(req.isAuthenticated() && req.user.tipo == "0"){
+		return next();
+  }
+  res.redirect('/');
+}

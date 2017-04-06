@@ -26,6 +26,8 @@ User.findOne = function (name, callback){
 		} else {
 			isNotAvailable = false;
 		}
+		console.log(result);
+		console.log(isNotAvailable);
 		return callback(false, isNotAvailable, this);
 	});
 };
@@ -59,7 +61,7 @@ User.validPass = function (name, pass, callback) {
 			passMatch = false;
 			console.log('Bad Login');
 		}
-		console.log(result);
+//		console.log(result);
 		return callback(false, passMatch, user);
 	});
 };

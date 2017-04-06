@@ -10,14 +10,15 @@
 	<div class="">
 
 		<h1><%= title %></h1>
+		  <% if (message.length > 0) { %>
+        <div class="alert alert-danger"><%= message %></div>
+    	<% } %>
+		<!-- show any messages that come back with authentication -->
 		<form action="/login" method="post">
 			user<br><input type="text" name="username" required><br>
 			password<br><input type="password" name="password" required><br>
 			<input type="submit" value="LogIn">
 		</form> 
-		<form action="/signup" method="get">
-			<input type="submit" value="Create a new account" />
-		</form>
 	</div>
 </body>
 </html>

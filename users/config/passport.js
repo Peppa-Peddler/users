@@ -22,10 +22,11 @@ module.exports = function (passport) {
 		function ( req, username, password, done ) {
 			process.nextTick (function (callback) {
 				User.findOne( username, function (err, isNotAvailable, user) {
-					if (err)
-						return done(err);
+					if (err)	return done(err);
+					console.log(isNotAvailable);
 					if (isNotAvailable == true) {
-						return done(err, false, req.flash('signupMessage', 'Username already taken D:'));
+						console.log('username not available');
+						return done(err, false, req.flash('signupMessage', 'Username already taken D:'));	
 					}	else {
 						console.log('New local user!');
 						var user = new User();
@@ -33,6 +34,7 @@ module.exports = function (passport) {
 							var salt = bcrypt.genSaltSync();
 							var hash = bcrypt.hashSync(req.body.password,salt);
 						user.password = hash;
+						user.tipo = req.body.tipo;
 						user.save(function (newUser) {
 							console.log("new user: " +  newUser);
 							return done(null);
@@ -50,6 +52,7 @@ module.exports = function (passport) {
 			User.validPass( name, pass, function(err, passMatch, user) {
 				if (!passMatch){
 					return done(null, false, req.flash('loginMessage','Wrong credentials.'));
+//					return done(null, false );
 				}
 				passport.authenticate();
 				console.log('authenticated!');
