@@ -4,11 +4,13 @@ var knex = require('../db/connection');
 var User = require('../models/user');
 var passport = require('passport');
 
-/* POST send taks to employer. */
+/* POST eliminates a task with tareaD_id as id_t. */
 router.post('/', isLoggedInAdmin, function(req, res) {
-	knex('tasks').insert([ {'rec_id': req.body.empleado, 't_title': req.body.title, 't_content': req.body.tarea, 'status': '0'} ]).then(function(result){
-		console.log(result);
-		console.log(req.body.tarea);
+	knex('tasks')
+	.where('id_t',req.body.tareaD_id)
+	.del().then(function(result) {
+		console.log('Elminated task: '+ tareaD_id);
+		req.flash('profileMessage', 'Deleted: '+tareaD_id);
 	});
 	res.redirect('/profile');
 });

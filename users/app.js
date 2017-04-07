@@ -17,6 +17,9 @@ var profile = require('./routes/profile');
 var logout = require('./routes/logout');
 var send = require('./routes/send');
 var tsend = require('./routes/tsend');
+var clearUser = require('./routes/clearUser');
+var reTask = require('./routes/reTask');
+var elimTask = require('./routes/elimTask');
 
 var app = express();
 
@@ -46,6 +49,9 @@ app.use('/profile', profile);
 app.use('/logout', logout);
 app.use('/send', send);
 app.use('/tsend', tsend);
+app.use('/clearuser', clearUser);
+app.use('/reTask', reTask);
+app.use('/elimTask', elimTask);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

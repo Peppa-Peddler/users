@@ -14,7 +14,9 @@
 	<div class="page-header text-center">
 		<h1><span class="fa fa-anchor"></span> Profile Page</h1>
 	</div>
-
+    <% if (message || "" == "") { %>
+      <div class="alert alert-danger"><%= message %></div>
+    <% } %>
 		<div class="row">
 			<!-- LOCAL INFORMATION -->
 			<div class="col-sm-6">
@@ -30,7 +32,7 @@
 							
 							<% if(user.tipo==0) { %>
 							<form action="/signup" method="get">
-								<input type="submit" value="Create a new account" />
+								<input type="submit" value="Manage accounts" />
  							</form>
 							<% } %>
 				</div>
@@ -60,16 +62,48 @@
 					<% for (var i = 0 ; i < tareas.length ; i ++){ %>
 						<div>
 								<p>
-									De: <%= tareas[i].username %><br>
+									<%= tareas[i].id_t%>
+									Para: <%= tareas[i].username %><br>
 									<%= tareas[i].t_title %>
-									<%= tareas[i].t_content %>
+									<%= tareas[i].t_content %><br>
+									Status: <%= tareas[i].status%>
+									<% if(user.tipo == 0) { %>
+											<% if(tareas[i].status == 1) { %>
+											<form action="/elimTask" method="post">
+												<input type="hidden" name="tareaD_id" value="<%= tareas[i].id_t %>">
+												<input type="submit" value="Done!">
+											</form>
+											<form action="/reTask" method="post">
+												<input type="hidden" name="tareaD_id" value="<%= tareas[i].id_t %>">
+												<input type="submit" value="Again!">
+											</form>
+											<% } else { %>
+												<br><strong>Waiting for review request</strong><br>
+											<% } %>
+									<% } else { %>	
+											<% if(tareas[i].status == 0) { %>
+											<form action="/reTask" method="post">
+												<input type="hidden" name="tareaD_id" value="<%= tareas[i].id_t %>">
+												<input type="submit" value="Pls D;">Submit for Review
+											</form>
+											<% } else { %>
+												<strong>Pending Review</strong><br>
+											<% } %>
+									<% } %>
 								<p>
-						</div>	
+						</div>
+						<hr>	
 					<% } %>
 			</div>
 				<% if(user.tipo == 0) { %>
 				<form action="/tsend" method="post">
-						<input type="text" name="empleado" placeholder="id_empleado"><br>
+						<select name="empleado">
+						<option selected disabled hidden>Empleado</option>
+						<% for( var i = 0 ; i < empleados.length ; i ++ ){ %>
+							<option value="<%= empleados[i].id_u %>"> <%= empleados[i].username %> </option>
+						<% } %>
+						</select>
+						<br>
 						<textarea name="title" placeholder="Titulo"></textarea><br>
 						<textarea name="tarea" placeholder="Descripcion"></textarea><br>
 						<input type="submit" value="T SEND!">

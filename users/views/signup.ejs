@@ -28,7 +28,25 @@
 		<p>Return? <a href='/profile'>ME</a></p>
 
 	</div>
-		<script src="confirm_password.js">
+  <div class="">
+  	<h1>Actual Users:</h1>
+    	<% for (var i = 0 ; i < empleados.length ; i ++){ %>
+      <div>
+        	<p>
+					User: <%= empleados[i].username %>
+					ID: <%= empleados[i].id_u %>
+					Tipo: <%= empleados[i].tipo %>
+					<form action="/clearUser" method="post">
+          	<input type="hidden" name="user_id" value="<%= empleados[i].id_u %>">
+          	<input type="hidden" name="user_name" value="<%= empleados[i].username %>">
+						<input type="submit" value="Delete!">
+					</form>
+					<p>
+			</div>
+			<% } %>
+	</div>
+  </div>
+	<script src="confirm_password.js">
 	</script>
 </body>
 </html>

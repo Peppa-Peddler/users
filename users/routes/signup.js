@@ -5,7 +5,13 @@ var User = require('../models/user');
 var passport = require('passport');
 
 router.get('/',isLoggedInAdmin, function(req, res) {
-	res.render('signup', {message: req.flash('signupMessage')} );
+	knex('usuarios').select('id_u','username','tipo').then (function (result) {
+		res.render('signup', {
+			empleados: result,
+			message: req.flash('signupMessage')
+		});
+		console.log(result);
+	});
 	console.log('rendered signup');
 });
 /* POST signup credentials. */
