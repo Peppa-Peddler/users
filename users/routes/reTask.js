@@ -10,14 +10,19 @@ router.post('/', isLoggedIn, function(req, res) {
 	.select('status')
 	.where('id_t',req.body.tareaD_id)
 	.then(function(result) {
-		console.log(resut);
-		if (result.status == 0) {
-			knex('tasks').update('status', '1');
+		console.log(result[0].status);
+		if (result[0].status == 0) {
+			knex('tasks').update('status', '1').then(function (result) {
+				console.log('Changed from 0 to 1');
+				res.redirect('./profile');
+			});
 		} else {
-			knex('tasks').update('status', '0');
+			knex('tasks').update('status', '0').then(function (result) {
+				console.log('Changed from 1 to 0');
+				res.redirect('./profile');
+			});
 		}
 	});
-	res.redirect('/profile');
 });
 
 module.exports = router;
