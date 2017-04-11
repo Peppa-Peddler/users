@@ -1,74 +1,37 @@
 var knex = require('../db/connection');
 var bcrypt = require('bcryptjs');
+var mongoose = require('mongoose');
 
-function User() {
-	this.id_u = '';
-	this.username = '';
-	this.password = '';
-	this.tipo = '1';
-	this.save = function (callback) {
-		var username = this.username;
-		knex('usuarios').insert([ {'username': this.username, 'password':this.password, 'tipo': this.tipo} ]).then(function (result) {
-			console.log("Added: ",username);
-			var user = new User();
-			user.username = this.username;
-			user.password = this.password;
-			user.tipo = this.tipo;
-			return callback(user);
-		});
-	};
-}
-User.findOne = function (name, callback){
-	var isNotAvailable = false;
-	knex('usuarios').where('username',name).then(function(result) {
-		if (result.length > 0) {
-			isNotAvailable = true;
-		} else {
-			isNotAvailable = false;
-		}
-		console.log(result);
-		console.log(isNotAvailable);
-		return callback(false, isNotAvailable, this);
-	});
-};
-User.findById = function(id, callback){
-	knex('usuarios').where('id_u',id).then(function(result) {
-		if(result.length>0){
-			var user = new User();
-			user.tipo = result[0]['tipo'];
-			user.username = result[0]['username'];
-			user.password = result[0]['password'];
-			user.id_u = result[0]['id_u'];
-			return callback(null,user);
-		} else {
-			return callback(null,null);
-		}
-	});
+var messageSchema = mongoose.Schema({
+	mensaje : String,
+	date: {type : Date, default: Date.now}
+},{_id : false});
+
+var taskSchema = mongoose.Schema({
+	title : {type: String, required: true},
+	content : {type: String, required: true},
+	status : {type: Boolean, default: false}
+},{_id : false});
+
+var userSchema = mongoose.Schema({
+	
+	local				:{
+		username	: String,
+		password	: String,
+		tipo			: Number,
+		messages	: [ messageSchema ],
+		date : { type: Date, default: Date.now },
+		tasks			: [ taskSchema ]
+	}
+	
+});
+
+userSchema.methods.generateHash = function (password) {
+	return bcrypt.hashSync( password,bcrypt.genSaltSync() );
 };
 
-User.validPass = function (name, pass, callback) {
-	var passMatch = false;
-	knex('usuarios').where('username',name).then(function(result) {
-		if (result.length>0 && bcrypt.compareSync(pass,result[0]['password']) ) {
-			passMatch = true;
-			var user = new User();
-			user.id_u = result[0]['id_u'];
-			user.username = result[0]['username'];
-			user.password = result[0]['password'];
-			user.tipo = result[0]['tipo'];
-			console.log('Good Login');
-		} else {
-			passMatch = false;
-			console.log('Bad Login');
-		}
-//		console.log(result);
-		return callback(false, passMatch, user);
-	});
-};
-User.show = function (callback) {
-	knex.select().table('usuarios').then( function(result) {
-		return callback(result);
-	});
+userSchema.methods.validPass = function (password) {
+	return bcrypt.compareSync( password, this.local.password )
 };
 
-module.exports = User;
+module.exports = mongoose.model('User', userSchema);

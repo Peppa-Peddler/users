@@ -6,7 +6,8 @@ var passport = require('passport');
 
 /* POST send taks to employer. */
 router.post('/', isLoggedInAdmin, function(req, res) {
-	knex('tasks').insert([ {'rec_id': req.body.empleado, 't_title': req.body.title, 't_content': req.body.tarea, 'status': '0'} ]).then(function(result){
+	console.log('Trying to post a task');
+	User.findByIdAndUpdate(req.body.empleado,{$push:{"local.tasks": {content:req.body.tarea, title: req.body.title}} }, {safe:true}).exec( function (err, result) {
 		console.log(result);
 		console.log(req.body.tarea);
 	});
@@ -16,7 +17,7 @@ router.post('/', isLoggedInAdmin, function(req, res) {
 module.exports = router;
 
 function isLoggedInAdmin (req,res,next) {
-	if(req.isAuthenticated() && req.user.tipo == 0){
+	if(req.isAuthenticated() && req.user.local.tipo == 0){
 		return next();
 	}
 	res.redirect('/');

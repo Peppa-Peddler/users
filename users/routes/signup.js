@@ -4,18 +4,17 @@ var knex = require('../db/connection');
 var User = require('../models/user');
 var passport = require('passport');
 
-router.get('/',isLoggedInAdmin, function(req, res) {
-	knex('usuarios').select('id_u','username','tipo').then (function (result) {
+router.get('/', isLoggedInAdmin, function(req, res) {
+	User.find( function (err,result) {
 		res.render('signup', {
 			empleados: result,
 			message: req.flash('signupMessage')
 		});
-		console.log(result);
 	});
 	console.log('rendered signup');
 });
 /* POST signup credentials. */
-router.post('/', isLoggedInAdmin,	passport.authenticate('local-signup', {
+router.post('/', isLoggedInAdmin, passport.authenticate('local-signup', {
 	succesRedirect : '/signup',
 	failureRedirect : '/signup',
 	failureFlash : true
@@ -24,8 +23,9 @@ router.post('/', isLoggedInAdmin,	passport.authenticate('local-signup', {
 module.exports = router;
 
 function isLoggedInAdmin(req,res,next){
-   console.log(req.user.tipo);
-  if(req.isAuthenticated() && req.user.tipo == "0"){
+  if(req.isAuthenticated() && req.user.local.tipo == "0"){
+  	console.log(req.user.local.tipo);
+		console.log("authenticated as Admin!");
 		return next();
   }
   res.redirect('/');

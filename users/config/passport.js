@@ -4,8 +4,8 @@ var User = require('../models/user');
 
 module.exports = function (passport) {
 	passport.serializeUser(function(user, done) {
-		console.log(user.id_u +" was seralized");
-		done(null, user.id_u);
+		console.log(user.id +" was seralized");
+		done(null, user.id);
 	});
 
 	passport.deserializeUser(function(id, done) {
@@ -15,47 +15,48 @@ module.exports = function (passport) {
 			});
 	});
 	passport.use('local-signup', new LocalStrategy({
-			usernameField : 'username',
-			passwordField : 'password',
-			passReqToCallback : true
+			usernameField		: 'username',
+			passwordField		: 'password',
+			passReqToCallback	: true
 		},
-		function ( req, username, password, done ) {
-			process.nextTick (function (callback) {
-				User.findOne( username, function (err, isNotAvailable, user) {
-					if (err)	return done(err);
-					if (isNotAvailable == true) {
-						console.log('username not available');
-						return done(err, false, req.flash('signupMessage', 'Username already taken D:'));	
-					}	else {
-						console.log('New local user!');
-						var user = new User();
-						user.username = req.body.username;
-							var salt = bcrypt.genSaltSync();
-							var hash = bcrypt.hashSync(req.body.password,salt);
-						user.password = hash;
-						user.tipo = req.body.tipo;
-						user.save(function (newUser) {
-							console.log("new user: " +  newUser);
+		function (req, username, password, done) {
+			process.nextTick(function() {
+
+				User.findOne({ 'local.username': username }).exec( function (err,user){
+					if (err) return done(err);
+					if (user) {
+						console.log('Username already taker D:');
+						return done(null, false, req.flash('signupMessage', 'Username already taken D:'));
+					} else {
+						var newUser = new User();
+						newUser.local.username = req.body.username;
+						newUser.local.password = newUser.generateHash(req.body.password);
+						newUser.local.tipo = req.body.tipo;
+						newUser.save( function (err) {
+							if (err) throw err;
+							console.log("new user: " + newUser.local.username);
 							return done(null);
 						});
 					}
 				});
 			});
 		}));
+
 	passport.use('local-login', new LocalStrategy({
-			usernameField : 'username',
-			passwordField : 'password',
+			usernameField		: 'username',
+			passwordField		: 'password',
 			passReqToCallback : true
 		},
-		function ( req, name, pass, done) {
-			User.validPass( name, pass, function(err, passMatch, user) {
-				if (!passMatch){
-					return done(null, false, req.flash('loginMessage','Wrong credentials.'));
-//					return done(null, false );
-				}
+		function (req, name, pass, done) {
+			User.findOne({'local.username': name}).exec( function (err,user) {
+				if (err) return done(err);
+				if (!user) 
+					return done(null, false, req.flash('loginMessage', 'No user found'));
+				if (!user.validPass(pass))
+					return done(null, false, req.flash('loginMessage', 'Wrong pass'));
+				console.log('Authenticated');
 				passport.authenticate();
-				console.log('authenticated!');
-				return done(null,user);
+				return done(null, user);
 			});
-	}));
+		}));
 }

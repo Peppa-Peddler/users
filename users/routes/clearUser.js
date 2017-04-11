@@ -6,28 +6,21 @@ var passport = require('passport');
 
 /* POST clear user account. */
 router.post('/', isLoggedInAdmin, function(req, res) {
-	if (req.body.user_id != "12") {
-		knex('buzon')
-		.where('rem_id', req.body.user_id)
-		.del()
-		.then(function() {
-			return knex('tasks')
-				.where('rec_id', req.body.user_id)
-				.del()
-		}).then( function() {
-			return knex('usuarios')
-				.where('id_u', req.body.user_id)
-				.del()
-		}).then( function() {
+	if (req.body.user_id != "58ec0b8f68be5a12c30da409") {
+		User.remove({"local.username":req.body.user_name}).exec(function (err, result) {
+			console.log('Removed: ' + req.body.user_name);
 			res.redirect('/signup');
 		});
+	} else {
+		console.log(req.body.user_id);
 	}
 });
 
 module.exports = router;
 
 function isLoggedInAdmin(req,res,next){
-	if(req.isAuthenticated() && req.user.tipo == "0" ){
+	if(req.isAuthenticated() && req.user.local.tipo == "0" ){
+		console.log("authenticated as Admin!");
 		return next();
 	}
 	res.redirect('/');

@@ -8,9 +8,10 @@ var passport = require('passport');
 router.post('/', isLoggedInAdmin, function(req, res) {
 	knex('tasks')
 	.where('id_t',req.body.tareaD_id)
-	.del().then(function(result) {
-		console.log('Elminated task: '+ tareaD_id);
-		req.flash('profileMessage', 'Deleted: '+tareaD_id);
+	.del()
+	.then(function(result) {
+		console.log('Elminated task: '+ req.body.tareaD_id);
+		req.flash('profileMessage', 'Deleted: '+ req.body.tareaD_id);
 	});
 	res.redirect('/profile');
 });

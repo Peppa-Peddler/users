@@ -33,12 +33,12 @@
     	<% for (var i = 0 ; i < empleados.length ; i ++){ %>
       <div>
         	<p>
-					User: <%= empleados[i].username %>
-					ID: <%= empleados[i].id_u %>
-					Tipo: <%= empleados[i].tipo %>
+					User: <%= empleados[i].local.username %>
+					ID: <%= empleados[i]._id %>
+					Tipo: <%= empleados[i].local.tipo %>
 					<form action="/clearUser" method="post">
-          	<input type="hidden" name="user_id" value="<%= empleados[i].id_u %>">
-          	<input type="hidden" name="user_name" value="<%= empleados[i].username %>">
+          	<input type="hidden" name="user_id" value="<%= empleados[i]._id %>">
+          	<input type="hidden" name="user_name" value="<%= empleados[i].local.username %>">
 						<input type="submit" value="Delete!">
 					</form>
 					<p>

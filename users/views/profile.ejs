@@ -23,14 +23,14 @@
 				<div class="well">
 					<h3><span class="fa fa-user"></span> Local</h3>
 							<p>
-									<strong>Privilages</strong>: <%= user.tipo%><br>
-									<strong>id</strong>: <%= user.id_u %><br>
-									<strong>Name</strong>: <%= user.username %><br>
-									<strong>Pass</strong>: <%= user.password %>
+									<strong>Privilages</strong>: <%= user.local.tipo%><br>
+									<strong>id</strong>: <%= user.id %><br>
+									<strong>Name</strong>: <%= user.local.username %><br>
+									<strong>Pass</strong>: <%= user.local.password %>
 							</p>
 							<a href="/profile">Recargar</a>
 							
-							<% if(user.tipo==0) { %>
+							<% if(user.local.tipo==0) { %>
 							<form action="/signup" method="get">
 								<input type="submit" value="Manage accounts" />
  							</form>
@@ -41,14 +41,14 @@
 			<div class="col-sm-6">
 				<div class="well">
 							<h1>Bandeja</h1>
-								<% for (var i = 0 ; i < mensajes.length ; i ++){ %>
+								<% if (mensajes) { for (var i = 0 ; i < mensajes.length ; i ++){ %>
 									<div>
 										<p>
 											De: <%= mensajes[i].username %><br>
 											<%= mensajes[i].mensaje %>
 										<p>
 								</div>
-							<% } %>
+							<% } } %>
 					</div>
 					<form action="/send" method="post">
 							<textarea name="mensaje" placeholder="Message"></textarea><br>
@@ -59,15 +59,15 @@
 		<div class="col-sm-6">
 			<div class="well">
 					<h1>Tasks</h1>
-					<% for (var i = 0 ; i < tareas.length ; i ++){ %>
+					<% if (tareas) { for (var i = 0 ; i < tareas.length ; i ++){ %>
 						<div>
 								<p>
-									<%= tareas[i].id_t%>
-									Para: <%= tareas[i].username %><br>
-									<%= tareas[i].t_title %>
-									<%= tareas[i].t_content %><br>
-									Status: <%= tareas[i].status%>
-									<% if(user.tipo == 0) { %>
+									<%= i%>
+									Para: <%= tareas[i].local.username %><br>
+									<%= tareas[i].local.tasks.title %>
+									<%= tareas[i].local.tasks.content %><br>
+									Status: <%= tareas[i].local.tasks.status%>
+									<% if(user.local.tipo == 0) { %>
 											<% if(tareas[i].status == 1) { %>
 											<form action="/elimTask" method="post">
 												<input type="hidden" name="tareaD_id" value="<%= tareas[i].id_t %>">
@@ -93,15 +93,15 @@
 								<p>
 						</div>
 						<hr>	
-					<% } %>
+					<% } }  %>
 			</div>
-				<% if(user.tipo == 0) { %>
+				<% if(user.local.tipo == 0) { %>
 				<form action="/tsend" method="post">
 						<select name="empleado">
 						<option selected disabled hidden>Empleado</option>
-						<% for( var i = 0 ; i < empleados.length ; i ++ ){ %>
-							<option value="<%= empleados[i].id_u %>"> <%= empleados[i].username %> </option>
-						<% } %>
+						<% if (empleados) { for( var i = 0 ; i < empleados.length ; i ++ ){ %>
+							<option value="<%= empleados[i].id %>"> <%= empleados[i].local.username %> </option>
+						<% } } %>
 						</select>
 						<br>
 						<textarea name="title" placeholder="Titulo"></textarea><br>
