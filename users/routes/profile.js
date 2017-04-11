@@ -8,11 +8,11 @@ var passport = require('passport');
 router.get('/', isLoggedIn, function(req, res) {
 	var mensajes;
 	var tareas;
-	User.find({messages: {$exists:true}},{"local.username":1,"local.messages":1}).exec(function (err,result) {
+	User.find({'local.messages': {$exists:true,$ne:[]}},{"local.username":1,"local.messages":1}).exec(function (err,result) {
 		mensajes = result;
 		console.log("Mensajes: "+ mensajes);
 		if (req.user.local.tipo == 0) {
-			User.find({"local.tasks": {$exists:true,$ne:[]} },{"local":1}).exec(function (err, result2) {
+			User.find({"local.tasks": {$exists:true,$ne:[]} },{"local.username":1,"local.tasks":1}).exec(function (err, result2) {
 				tareas = result2;
 				console.log("Tareas: "+tareas);
 				User.find({},{id:1 , "local.username": 1}).exec(function (err, result3) {

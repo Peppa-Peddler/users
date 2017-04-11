@@ -42,12 +42,14 @@
 				<div class="well">
 							<h1>Bandeja</h1>
 								<% if (mensajes) { for (var i = 0 ; i < mensajes.length ; i ++){ %>
+								<% for (var j = 0; j < mensajes[i].local.messages.length ; j++) { %>
 									<div>
 										<p>
-											De: <%= mensajes[i].username %><br>
-											<%= mensajes[i].mensaje %>
+											De: <%= mensajes[i].local.username %><br>
+											<%= mensajes[i].local.messages[j].mensaje %>
 										<p>
 								</div>
+								<% } %>
 							<% } } %>
 					</div>
 					<form action="/send" method="post">
@@ -60,21 +62,22 @@
 			<div class="well">
 					<h1>Tasks</h1>
 					<% if (tareas) { for (var i = 0 ; i < tareas.length ; i ++){ %>
+						<% for (var j = 0; j < tareas[i].local.tasks.length ; j++) { %>
 						<div>
 								<p>
 									<%= i%>
 									Para: <%= tareas[i].local.username %><br>
-									<%= tareas[i].local.tasks.title %>
-									<%= tareas[i].local.tasks.content %><br>
-									Status: <%= tareas[i].local.tasks.status%>
+									<%= tareas[i].local.tasks[j].title %>
+									<%= tareas[i].local.tasks[j].content %><br>
+									Status: <%= tareas[i].local.tasks[j].status%>
 									<% if(user.local.tipo == 0) { %>
-											<% if(tareas[i].status == 1) { %>
+											<% if(tareas[i].local.tasks[j].status == 1) { %>
 											<form action="/elimTask" method="post">
-												<input type="hidden" name="tareaD_id" value="<%= tareas[i].id_t %>">
+												<input type="hidden" name="tareaD_id" value="<%= [tareas[i]._id,j] %>">
 												<input type="submit" value="Done!">
 											</form>
 											<form action="/reTask" method="post">
-												<input type="hidden" name="tareaD_id" value="<%= tareas[i].id_t %>">
+												<input type="hidden" name="tareaD_id" value="<%= [tareas[i]._id,j] %>">
 												<input type="submit" value="Again!">
 											</form>
 											<% } else { %>
@@ -93,6 +96,7 @@
 								<p>
 						</div>
 						<hr>	
+						<% } %>
 					<% } }  %>
 			</div>
 				<% if(user.local.tipo == 0) { %>

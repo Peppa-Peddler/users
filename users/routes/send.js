@@ -6,7 +6,8 @@ var passport = require('passport');
 
 /* POST message. */
 router.post('/', isLoggedIn, function(req, res) {
-	knex('buzon').insert([ {'rem_id': req.user.id_u, 'mensaje': req.param('mensaje')} ]).then(function(result){
+	console.log('Sending a message');
+	User.findByIdAndUpdate(req.user._id,{$push:{"local.messages": {mensaje:req.body.mensaje}} }, {safe:true}).exec( function (err, result) {
 		console.log(req.body.mensaje);
 	});
 	res.redirect('/profile');
