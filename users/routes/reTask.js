@@ -3,25 +3,17 @@ var router = express.Router();
 var knex = require('../db/connection');
 var User = require('../models/user');
 var passport = require('passport');
+var mongoose = require('mongoose');
 
 /* POST eliminates a task with tareaD_id as id_t. */
 router.post('/', isLoggedIn, function(req, res) {
-	knex('tasks')
-	.select('status')
-	.where('id_t',req.body.tareaD_id)
-	.then(function(result) {
-		console.log(result[0].status);
-		if (result[0].status == 0) {
-			knex('tasks').where('id_t',req.body.tareaD_id).update('status', '1').then(function (result) {
-				console.log('Changed from 0 to 1');
-				res.redirect('./profile');
-			});
-		} else {
-			knex('tasks').where('id_t',req.body.tareaD_id).update('status', '0').then(function (result) {
-				console.log('Changed from 1 to 0');
-				res.redirect('./profile');
-			});
-		}
+	var datos = req.body.tareaD_id.split(",");
+	console.log(datos);
+	console.log(datos[1]);
+	User.update({ 'local.tasks._id':mongoose.Types.ObjectId(datos[1]) },{$set: {'local.tasks.$.status':!(datos[2]== 'true')}}).exec(function(err,result) {
+		console.log('New status for: ' + datos[1] + ",now it's: " + !(datos[2] == 'true') );
+		console.log(result);
+		res.redirect('./profile');
 	});
 });
 

@@ -11,7 +11,7 @@ var taskSchema = mongoose.Schema({
 	title : {type: String, required: true},
 	content : {type: String, required: true},
 	status : {type: Boolean, default: false}
-},{_id : false});
+});
 
 var userSchema = mongoose.Schema({
 	

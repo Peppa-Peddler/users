@@ -73,20 +73,20 @@
 									<% if(user.local.tipo == 0) { %>
 											<% if(tareas[i].local.tasks[j].status == 1) { %>
 											<form action="/elimTask" method="post">
-												<input type="hidden" name="tareaD_id" value="<%= [tareas[i]._id,j] %>">
+												<input type="hidden" name="tareaD_id" value="<%= [tareas[i]._id, tareas[i].local.tasks[j]._id, tareas[i].local.tasks[j].status] %>">
 												<input type="submit" value="Done!">
 											</form>
 											<form action="/reTask" method="post">
-												<input type="hidden" name="tareaD_id" value="<%= [tareas[i]._id,j] %>">
+												<input type="hidden" name="tareaD_id" value="<%= [tareas[i]._id, tareas[i].local.tasks[j]._id, tareas[i].local.tasks[j].status] %>">
 												<input type="submit" value="Again!">
 											</form>
 											<% } else { %>
 												<br><strong>Waiting for review request</strong><br>
 											<% } %>
 									<% } else { %>	
-											<% if(tareas[i].status == 0) { %>
+											<% if(tareas[i].local.tasks[j].status == 0) { %>
 											<form action="/reTask" method="post">
-												<input type="hidden" name="tareaD_id" value="<%= tareas[i].id_t %>">
+												<input type="hidden" name="tareaD_id" value="<%= [tareas[i]._id,tareas[i].local.tasks[j]._id, tareas[i].local.tasks[j].status] %>">
 												<input type="submit" value="Pls D;">Submit for Review
 											</form>
 											<% } else { %>
