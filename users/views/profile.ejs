@@ -42,14 +42,12 @@
 				<div class="well">
 							<h1>Bandeja</h1>
 								<% if (mensajes) { for (var i = 0 ; i < mensajes.length ; i ++){ %>
-								<% for (var j = 0; j < mensajes[i].local.messages.length ; j++) { %>
 									<div>
 										<p>
 											De: <%= mensajes[i].local.username %><br>
-											<%= mensajes[i].local.messages[j].mensaje %>
+											<%= mensajes[i].local.messages.mensaje %>
 										<p>
 								</div>
-								<% } %>
 							<% } } %>
 					</div>
 					<form action="/send" method="post">
@@ -69,13 +67,17 @@
 									Para: <%= tareas[i].local.username %><br>
 									<%= tareas[i].local.tasks[j].title %>
 									<%= tareas[i].local.tasks[j].content %><br>
+									Hora Limite: <%= tareas[i].local.tasks[j].limit%>
 									Status: <%= tareas[i].local.tasks[j].status%>
+									<% if (tareas[i].local.tasks[j].late ) { %>
+											<strong>LATE</strong><br>
+									<% } %>
 									<% if(user.local.tipo == 0) { %>
-											<% if(tareas[i].local.tasks[j].status == 1) { %>
 											<form action="/elimTask" method="post">
 												<input type="hidden" name="tareaD_id" value="<%= [tareas[i]._id, tareas[i].local.tasks[j]._id, tareas[i].local.tasks[j].status] %>">
-												<input type="submit" value="Done!">
+												<input type="submit" value="Discard!">
 											</form>
+											<% if(tareas[i].local.tasks[j].status == 1) { %>
 											<form action="/reTask" method="post">
 												<input type="hidden" name="tareaD_id" value="<%= [tareas[i]._id, tareas[i].local.tasks[j]._id, tareas[i].local.tasks[j].status] %>">
 												<input type="submit" value="Again!">
@@ -110,6 +112,8 @@
 						<br>
 						<textarea name="title" placeholder="Titulo"></textarea><br>
 						<textarea name="tarea" placeholder="Descripcion"></textarea><br>
+						<input type="date" name="limite">
+						<input type="time" name="hora" value="18:00:00"><br>
 						<input type="submit" value="T SEND!">
 				</form>
 				<% } %>

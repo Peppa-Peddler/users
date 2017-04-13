@@ -10,7 +10,10 @@ var messageSchema = mongoose.Schema({
 var taskSchema = mongoose.Schema({
 	title : {type: String, required: true},
 	content : {type: String, required: true},
-	status : {type: Boolean, default: false}
+	status : {type: Boolean, default: false},
+	late : {type: Boolean, default: false},
+	start : {type : Date, default : Date.now},
+	limit : Date
 });
 
 var userSchema = mongoose.Schema({
